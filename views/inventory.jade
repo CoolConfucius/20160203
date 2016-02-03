@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  .jumbotron
+    h1.text-center= email+"'s Profile:"
+  a.btn.btn-danger(href='/users/changepassword') Change password
+  if swchars
+    if swchars.length === 0
+      h3 Your Collection is Empty!
+    else 
+      h3 Your Collection:   
+    ul#collection 
+      each game in swchars
+        li
+          a.remove.btn.btn-small(data-_id=game._id) X
+          a.game.col-xs-offset-1(data-find=game.find, href='/sw/person/'+game.find)= game.name
+
+block scripts
+  script(src="/js/main.js")

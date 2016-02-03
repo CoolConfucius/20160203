@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  .jumbotron.text-center
+    h1 Book Swap
+    .container#list
+      .row
+        .col-xs-2 Title
+        .col-xs-2 Author
+        .col-xs-2 Rating
+      .row.book
+        .col-xs-2= book.title
+        .col-xs-2= book.author
+        .col-xs-2= book.rating
+        hr
+        img.imageDetail(src=book.imageURL)
+    hr
+    //- .container#tenantslist
+    //-   .row
+    //-     if tenants
+    //-       if tenants[0]
+    //-         .col-xs-2 Tenants in Apt:
+    //-            each tenant in tenants 
+    //-              .row.tenant
+    //-                .col-xs-2.name= tenant.name
+    //-       else 
+    //-         .col-xs-3 Apartment is empty
+        
+        
+
+      
+      
+        
+    
+      
+  

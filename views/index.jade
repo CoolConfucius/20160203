@@ -1,0 +1,49 @@
+extends layout
+
+block content
+  .jumbotron.text-center
+    h1 Game Trade
+  .container#list
+    //- if games
+      
+
+    //- if (state==='games')||true
+    //-   .row
+    //-     .col-xs-2 Title
+    //-     .col-xs-2 Status
+    //-     hr
+    //-   each game in games 
+    //-     .row.game
+    //-       .col-xs-2.name= game.title
+    //-       if game.canTrade 
+    //-        .col-xs-3 Available for trade
+    //-        .col-xs-3.btn.btn-danger.selectTenant(data-userId=game._id, data-status='hasHome') Withdraw
+    //-       else 
+    //-         .col-xs-3 Not available for trade
+    //-         .col-xs-3.btn.btn-primary.selectTenant(data-userId=game._id, data-status='homeless') Make available
+    
+    //- else if (state==='apartments' || state === 'move')
+    //-   .row
+    //-     .col-xs-2 Total Rooms
+    //-     .col-xs-2 Available Rooms
+    //-     .col-xs-2 Rent per Room
+    //-   hr 
+    //-   each book in apartments 
+    //-     .row.book
+    //-       .col-xs-2= book.totalRooms
+    //-       .col-xs-2= book.availableRooms
+    //-       .col-xs-2= book.rentPerRoom
+    //-       .col-xs-2.thumb
+    //-         img(src=book.imageURL)
+    //-       .col-xs-2.btn.btn-success.showApartment(data-apartmentId=book._id) Details
+    //-       if state==='move'
+    //-         .col-xs-2.btn.btn-primary.move(data-userId=userId,data-apartmentId=book._id, data-status=status) move 
+            
+
+    //- else 
+    //-   .col-xs-2.btn.btn-primary#addBook Add Book      
+
+
+block scripts
+  script(src='/lib/firebase/firebase.js')
+  script(src="/js/main.js")
