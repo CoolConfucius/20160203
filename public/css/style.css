@@ -5,3 +5,8 @@
 .showGame, .publisher{
   overflow: auto; 
 }
+
+.imageDetail{
+  max-width: 500px; 
+  max-height: 500px; 
+}

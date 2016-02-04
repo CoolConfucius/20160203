@@ -23,7 +23,7 @@ router.get('/history', function(req, res, next) {
   .exec(function(err, trades){
     console.log("trades:", trades);
     if(err) return res.status(400).send(err); 
-    res.render('trades', {trades:trades, state:'history', user:req.user});
+    res.render('trades', {trades:trades, state:'history', user:req.user, message: "Your Trade History"});
     // res.send(trades)
   });
 });
@@ -44,11 +44,50 @@ router.get('/', function(req, res, next) {
   .exec(function(err, trades){
     console.log("trades:", trades);
     if(err) return res.status(400).send(err); 
-    res.render('trades', {trades:trades, state:'myTrades', user:req.user});
+    res.render('trades', {trades:trades, state:'myTrades', user:req.user, message: "Your Pending Trades"});
     // res.send(trades)
   });
 });
 
+// Trades awaiting my decision
+router.get('/theiroffers', function(req, res, next) {  
+  Trade
+  .find({
+    $and: [
+      {user1: req.user._id},
+      {status: "pending"}
+    ]
+  })
+  .populate('user1')
+  .populate('game1')
+  .populate('user2')
+  .populate('game2')
+  .exec(function(err, trades){
+    console.log("trades:", trades);
+    if(err) return res.status(400).send(err); 
+    res.render('trades', {trades:trades, state:'theiroffers', user:req.user, message: "Trade Offers Waiting Your Decision"});
+  });
+});
+
+// Trades I offer
+router.get('/myoffers', function(req, res, next) {  
+  Trade
+  .find({
+    $and: [
+      {user2: req.user._id},
+      {status: "pending"}
+    ]
+  })
+  .populate('user1')
+  .populate('game1')
+  .populate('user2')
+  .populate('game2')
+  .exec(function(err, trades){
+    console.log("trades:", trades);
+    if(err) return res.status(400).send(err); 
+    res.render('trades', {trades:trades, state:'myoffers', user:req.user, message: "Trades You Offered"});
+  });
+});
 
 
 // Post trade: 

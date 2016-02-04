@@ -3,6 +3,9 @@ extends layout
 block content
   .jumbotron.text-center
     h1 Game Trade
+    br
+    h2= message
+  
   .container#list
     if trades
       .row 
@@ -27,10 +30,18 @@ block content
               .col-xs-2.btn.btn-warning.btn-sm#decline(data-trade=trade._id) Withdraw
     
     br
-    if state === "myTrades"
-      a(href='/trades/history') See My Trade History      
-    if state === "history"
+    if state !== "history"
+      a(href='/trades/history') See My Trade History
+      br      
+    if state !== "myTrades"
       a(href='/trades') See My Pending Trades
-
+      br
+    if state !== "theiroffers"
+      a(href='/trades/theiroffers') See Trades Offered to You
+      br
+    if state !== "myoffers"
+      a(href='/trades/myoffers') See Trades You Offered
+      br
+  br
 block scripts
   script(src="/js/main.js")
