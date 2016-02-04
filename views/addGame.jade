@@ -2,22 +2,23 @@ extends layout
 
 block content
   h1= title
-  form
-    .form-group
-      label(for='title') Title
-      input#title.form-control(type='text', placeholder='title')
-    .form-group
-      label(for='publisher') Publisher
-      input#publisher.form-control(type='text', placeholder='publisher')
-    .form-group
-      label(for='platform') Platform
-      input#platform.form-control(type='text', placeholder='platform')
-    .form-group
-      label(for='rating') Rating
-      input#rating.form-control(type='number' min="0", max="10", step="1", placeholder='rating')
-    .form-group
-      label(for='imageurl') Image URL
-      input#imageurl.form-control(type='text', placeholder='imageurl')
+  .jumbotron
+    form
+      .form-group
+        label(for='title') Title
+        input#title.form-control(type='text', placeholder='title')
+      .form-group
+        label(for='publisher') Publisher
+        input#publisher.form-control(type='text', placeholder='publisher')
+      .form-group
+        label(for='platform') Platform
+        input#platform.form-control(type='text', placeholder='platform')
+      .form-group
+        label(for='rating') Rating
+        input#rating.form-control(type='number' min="0", max="10", step="1", placeholder='rating')
+      .form-group
+        label(for='imageurl') Image URL
+        input#imageurl.form-control(type='text', placeholder='imageurl')
     
     button.btn.btn-default#addGame(type='submit') Add Game
     hr
