@@ -28,10 +28,9 @@ block content
     
     br
     if state === "myTrades"
-      a(href='/trades') See All Trades
-    else 
-      a(href='/trades/mine') See My Trades
+      a(href='/trades/history') See My Trade History      
+    if state === "history"
+      a(href='/trades') See My Pending Trades
 
 block scripts
-  script(src='/lib/firebase/firebase.js')
   script(src="/js/main.js")

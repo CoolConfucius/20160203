@@ -9,6 +9,7 @@ function init() {
   $('#accept').click(acceptTrade);
   $('#decline').click(declineTrade);
   $('#toggle').click(toggle);
+  $('#removeGame').click(removeGame);
 }
 
 function showGame(){
@@ -50,7 +51,7 @@ function acceptTrade(){
     method: "PUT"
   })
   .success(function(data) {
-    location.replace('/trades/mine');
+    location.replace('/trades/history');
   })
   .fail(function(err) {
     console.error("Error:", err);
@@ -65,7 +66,7 @@ function declineTrade(){
     method: "PUT"
   })
   .success(function(data) {
-    location.replace('/trades/mine');
+    location.replace('/trades/history');
   })
   .fail(function(err) {
     console.error("Error:", err);
@@ -79,6 +80,23 @@ function toggle(){
   $.ajax({
     url: '/games/toggle' + gameid, 
     method: "PUT"
+  })
+  .success(function(data) {
+    location.replace('/games/mine');
+  })
+  .fail(function(err) {
+    console.error("Error:", err);
+  });
+}
+
+
+function removeGame(){
+  var gameid = '/' + $(this).data().gameid.replace(/\"/g,""); 
+  var userid = '/' + $(this).data().userid.replace(/\"/g,""); 
+  
+  $.ajax({
+    url: '/games' + gameid + userid, 
+    method: "DELETE"
   })
   .success(function(data) {
     location.replace('/games/mine');

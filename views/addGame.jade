@@ -5,16 +5,19 @@ block content
   form
     .form-group
       label(for='title') Title
-      input#title.password.form-control(type='text', placeholder='title')
+      input#title.form-control(type='text', placeholder='title')
     .form-group
       label(for='publisher') Publisher
-      input#publisher.password.form-control(type='text', placeholder='publisher')
+      input#publisher.form-control(type='text', placeholder='publisher')
+    .form-group
+      label(for='platform') Platform
+      input#platform.form-control(type='text', placeholder='platform')
     .form-group
       label(for='rating') Rating
-      input#rating.password.form-control(type='number' min="0", max="10", step="1", placeholder='rating')
+      input#rating.form-control(type='number' min="0", max="10", step="1", placeholder='rating')
     .form-group
       label(for='imageurl') Image URL
-      input#imageurl.password.form-control(type='text', placeholder='imageurl')
+      input#imageurl.form-control(type='text', placeholder='imageurl')
     
     button.btn.btn-default#addGame(type='submit') Add Game
     hr

@@ -9,37 +9,33 @@ var Trade = require('../models/trade');
 
 router.use(authMiddleware);
 
-// See all trades + optional query string
-router.get('/', function(req, res, next) {  
-  if (req.query.sort) {
-    var sortObj = {};
-    sortObj[req.query.sort] = req.query.desc ? -1 : 1;
-  };
 
-  if (req.query.limit) {
-    var limit = parseInt(req.query.limit);
-  };
-
-  delete req.query.sort; delete req.query.desc; delete req.query.limit;
-
+// See my trades
+router.get('/history', function(req, res, next) {  
   Trade
-  .find(req.query).limit(limit).sort(sortObj)
+  .find({
+    $or: [{user1: req.user._id}, {user2: req.user._id}]
+  })
   .populate('user1')
   .populate('game1')
   .populate('user2')
   .populate('game2')
   .exec(function(err, trades){
+    console.log("trades:", trades);
     if(err) return res.status(400).send(err); 
-    res.render('trades', {trades:trades, state:'trades', user:req.user});
+    res.render('trades', {trades:trades, state:'history', user:req.user});
     // res.send(trades)
   });
 });
 
-// See my trades
-router.get('/mine', function(req, res, next) {  
+// See my pending trades
+router.get('/', function(req, res, next) {  
   Trade
   .find({
-    $or: [{user1: req.user._id}, {user2: req.user._id}]
+    $and: [
+      {$or: [{user1: req.user._id}, {user2: req.user._id}]},
+      {status: "pending"}
+    ]
   })
   .populate('user1')
   .populate('game1')
@@ -62,7 +58,7 @@ router.post('/:user1/:game1/:user2/:game2', function(req, res) {
         if(err) res.status(400).send(err);
         Game.findById(req.params.game2, function(err, game2) {
           if(err) res.status(400).send(err);
-          if (!game1.canTrade || !game2.canTrade) {
+          if (game1.canTrade !== "yes" || game2.canTrade !== "yes") {
             res.send("Not both games are open to trade!"); return; 
           };
 
@@ -72,8 +68,8 @@ router.post('/:user1/:game1/:user2/:game2', function(req, res) {
             user2: req.params.user2,
             game2: req.params.game2
           });
-          game1.canTrade = false; 
-          game2.canTrade = false; 
+          game1.canTrade = "inTrade"; 
+          game2.canTrade = "inTrade"; 
 
           game1.save(function(err, savedGame1) {
             game2.save(function(err, savedGame2) {
@@ -100,11 +96,14 @@ router.put('/:tradeId', function(req, res) {
       if(err) res.status(400).send(err);
       User.findById(trade.user2, function(err, user2) {
         if(err) res.status(400).send(err);
-        // Game.findById(trade.game1, function(err, game1) {
-        //   if(err) res.status(400).send(err);
-        //   Game.findById(trade.game2, function(err, game2) {
-        //     if(err) res.status(400).send(err);
-            
+        Game.findById(trade.game1, function(err, game1) {
+          if(err) res.status(400).send(err);
+          Game.findById(trade.game2, function(err, game2) {
+            if(err) res.status(400).send(err);
+            game1.canTrade = "no"; 
+            game2.canTrade = "no"; 
+
+    
             var index1 = user1.games.indexOf(trade.game1);
             user1.games.splice(index1, 1);
 
@@ -116,16 +115,21 @@ router.put('/:tradeId', function(req, res) {
 
             trade.status = "complete"; 
 
+
             user1.save(function(err, savedUser1) {
               user2.save(function(err, savedUser2) {
-                trade.save(function(err, savedTrade) {
-                  res.status(err ? 400 : 200).send(err || savedTrade);                  
-                })
+                game1.save(function(err, savedGame1) {
+                  game2.save(function(err, savedGame2) {    
+                    trade.save(function(err, savedTrade) {
+                      res.status(err ? 400 : 200).send(err || savedTrade);                  
+                    });
+                  });
+                });    
               });
             });
 
-        //   });
-        // });   
+          });
+        });
       });
     });
   });
@@ -145,8 +149,8 @@ router.put('/decline/:tradeId', function(req, res) {
       Game.findById(trade.game2, function(err, game2) {
         if(err) res.status(400).send(err);
         
-        game1.canTrade = true; 
-        game2.canTrade = true; 
+        game1.canTrade = "yes"; 
+        game2.canTrade = "yes"; 
 
         trade.status = "declined"; 
 

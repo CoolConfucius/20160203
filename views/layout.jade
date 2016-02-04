@@ -1,10 +1,11 @@
 doctype html
 html
   head
-    title Game Trade
-    //- link(rel='stylesheet', href='/lib/bootstrap/dist/css/bootstrap.min.css')
+    title Game Trade    
     link(rel='stylesheet', href='/lib/bootswatch-dist/css/bootstrap.min.css')
     link(rel='stylesheet', href='/css/style.css')
+    block styles 
+
   body
     nav.navbar.navbar-default.navbar-static-top
       .container
@@ -19,10 +20,11 @@ html
           ul.nav.navbar-nav
             li
               a(href='/') Home
-            li
-              a(href='/games') Games for Trade
-            li
-              a(href='/trades/mine') My Trades
+            if user
+              li
+                a(href='/games') Games for Trade
+              li
+                a(href='/trades') My Trades
           ul.nav.navbar-nav.navbar-right
             if !user
               li
@@ -31,7 +33,7 @@ html
                 a(href='/login') Login
             else
               li
-                a(href='/users/profile')= 'Logged in as ' + user.email
+                a(href='/games/mine')= 'Logged in as ' + user.email
               li
                 a(href='/users/logout') Logout
               li
@@ -42,6 +44,5 @@ html
       block content
 
     script(src='/lib/jquery/dist/jquery.min.js')
-    //- script(src='/lib/bootstrap/dist/js/bootstrap.min.js')
     script(src='/lib/bootswatch-dist/js/bootstrap.min.js')
     block scripts

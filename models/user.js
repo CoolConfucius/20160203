@@ -12,8 +12,7 @@ var userSchema = new mongoose.Schema({
   uid: { type: String },
   email: { type: String }, 
   games: [{ type: mongoose.Schema.Types.ObjectId, ref: "Game" }]
-  // ,
-  // trades: [{ type: mongoose.Schema.Types.ObjectId, ref: "Trade" }]
+  
 });
 
 // instance method

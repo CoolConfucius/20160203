@@ -9,30 +9,6 @@ var Trade = require('../models/trade');
 
 router.use(authMiddleware);
 
-// get all games, optional query string 
-// router.get('/', function(req, res, next) {  
-//   if (req.query.sort) {
-//     var sortObj = {};
-//     sortObj[req.query.sort] = req.query.desc ? -1 : 1;
-//   };
-
-//   if (req.query.limit) {
-//     var limit = parseInt(req.query.limit);
-//   };
-
-//   delete req.query.sort;
-//   delete req.query.desc;
-//   delete req.query.limit;
-
-//   Game
-//   .find(req.query).limit(limit).sort(sortObj)
-//   .exec(function(err, games){
-//     if(err) return res.status(400).send(err); 
-//     // res.render('index', {games:games, state:'games'});
-//     // res.send(games);
-//     res.render('index', { title: "Game Trade", user: req.user, games: games , state: "games"});
-//   });
-// });
 
 // get games that aren't yours that are available for trade: 
 router.get('/', function(req, res, next) {  
@@ -44,12 +20,10 @@ router.get('/', function(req, res, next) {
   .exec(function(err, users){
     console.log(users, "USERS");
     if(err) return res.status(400).send(err); 
-    // res.render('index', {games:games, state:'games'});
-    // res.send(games);
     var games = []; 
     users.forEach(function(entry){
       entry.games.forEach(function(game){
-        if (game.canTrade) {
+        if (game.canTrade === "yes") {
           game.userId = entry._id; 
           games.push(game);
         };
@@ -61,7 +35,7 @@ router.get('/', function(req, res, next) {
 
 
 // my games
-// find only games that has the user
+// find only games that belong to the user
 router.get('/mine', function(req, res, next) {  
   console.log('requser', req.user);
   User
@@ -75,6 +49,7 @@ router.get('/mine', function(req, res, next) {
 });
 
 
+// User has found a desired game. The next step is to select a game from inentory to trade
 router.get('/offerTrade/:desiredGame/:owner', function(req, res, next) {  
   console.log('requser', req.user);
   User
@@ -94,19 +69,7 @@ router.get('/offerTrade/:desiredGame/:owner', function(req, res, next) {
 });
 
 
-
-// router.put('/', function(req, res) {
-//   User.findById(req.user._id, function(err, user) {
-//     var game = new Game(req.body); 
-
-//     user.games.push(game);
-//     user.save(function(err, savedUser) {
-//       res.status(err ? 400 : 200).send(err || savedUser); 
-//     });
-//   });
-// });
-
-
+// Post a new game 
 router.post('/', function(req, res) {
   User.findById(req.user._id, function(err, user) {
     req.body.userId = req.user._id; 
@@ -139,17 +102,43 @@ router.get('/showpage/:gameId/:ownerId', function(req, res, next){
   }); 
 });
 
+// Toggle Game's availability for trade 
 router.put('/toggle/:gameid', function(req, res, next){
   Game.findById(req.params.gameid, function(err, game){
     if(err) res.status(400).send(err);
-    game.canTrade = !game.canTrade;
+    if (game.canTrade !== "pending") {
+      game.canTrade = (game.canTrade === "yes") ? "no" : "yes";
+    };
+    
     game.save(function(err, savedGame){
       res.status(err ? 400 : 200).send(err || savedGame);
-      console.log('toggled game');
+      
     });
   });
 });
 
+// Remove a game from Game Trade
+router.delete('/:gameid/:userid', function(req, res, next){
+  // console.log("remove a game!");
+  User.findById(req.user._id, function(err, user){
+    // console.log("found user!", user);
+    if(err) res.status(400).send(err);
 
+    Game.findById(req.params.gameid, function(err, game){
+      // console.log("found game!", game);
+      if(err) res.status(400).send(err);
+
+      var index = user.games.indexOf(game._id);
+      // console.log("gameindx",index);
+      user.games.splice(index, 1);
+      
+      user.save(function(err, savedUser){
+        game.remove();
+        res.status(err ? 400 : 200).send(err || savedUser);
+        // console.log('deleted game');
+      });
+    });
+  });
+});
 
 module.exports = router;

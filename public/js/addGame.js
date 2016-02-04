@@ -7,10 +7,13 @@ function init(){
 }
 
 
-function addGame(){
+function addGame(e){
+  e.preventDefault();
+
   $.post('/games', {
     title: $('#title').val(),
     publisher: $('#publisher').val(),
+    platform: $('#platform').val(),
     rating: $('#rating').val(),
     imageURL: $('#imageurl').val()
   })
@@ -18,10 +21,9 @@ function addGame(){
     console.log('success');
     location.href = '/games/mine';
   })
-  .fail(function(err) {
-    //alert('Error.  Check console.');
-    console.log('ERROR');
+  .fail(function(err) {    
     console.log('err:', err);
+    location.href = '/games/mine';
   });
 }
 

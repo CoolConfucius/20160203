@@ -2,7 +2,7 @@ extends layout
 
 block content
   .jumbotron
-    h1.text-center= email+"'s Profile:"
+    h1.text-center= user.email+"'s Profile:"
   a.btn.btn-danger(href='/users/changepassword') Change password
   if games
     if games.length === 0
@@ -12,17 +12,28 @@ block content
     .container#collection 
       .row
         .col-xs-2 Title
+        .col-xs-2 Platform
+        .col-xs-1 Rating
+        .col-xs-2 Open Trade?
+      hr
       each game in games
         .row
-          btn.col-xs-2.btn.btn-primary.btn-sm.showGame(data-gameid=game._id, data-userid=user._id)= game.title
-          
-          if game.canTrade
-            a.col-xs-offset-1 Open to Trade
+          .col-xs-2.btn.btn-primary.showGame(data-gameid=game._id, data-userid=user._id)= game.title
+          .col-xs-2= game.platform
+          .col-xs-1= game.rating
+          if game.canTrade==="yes"
+            .col-xs-1 Yes
             if state==="offerTrade"
-              .btn.btn-success#makeTrade(data-gameId=game._id, data-userId=user._id, data-desiredgame=desiredgame, data-owner=ownerid) Make Trade
+              .btn.btn-success.col-xs-2#makeTrade(data-gameId=game._id, data-userId=user._id, data-desiredgame=desiredgame, data-owner=ownerid) Make Trade
+          else if game.canTrade==="no"
+            .col-xs-1 No
           else 
-            a.col-xs-offset-1 Not Open to Trade
-          //- btn.col-xs-2.btn.btn-primary.btn-sm.showGame(data-gameid=game._id, data-userid=user._id) Show Game
+            .col-xs-1 Pending
+  hr
+  a#addGame.btn.btn-warning(href='/addGame')  Add a Game 
+  br
+  a.btn.btn-info(href='/') Back
+
 
 
 block scripts
