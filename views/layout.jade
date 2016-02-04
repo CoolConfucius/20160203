@@ -20,7 +20,9 @@ html
             li
               a(href='/') Home
             li
-              a(href='/games') All Games
+              a(href='/games') Games for Trade
+            li
+              a(href='/trades/mine') My Trades
           ul.nav.navbar-nav.navbar-right
             if !user
               li
@@ -33,7 +35,8 @@ html
               li
                 a(href='/users/logout') Logout
               li
-                a(href='/users/profile') Inventory/ Profile
+                a(href='/games/mine') Inventory
+
 
     .container
       block content

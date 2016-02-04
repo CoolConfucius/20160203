@@ -9,7 +9,15 @@ var authMiddleware = require('../config/auth');
 /* GET home page. */
 router.get('/', authMiddleware, function(req, res, next) {
   console.log("User: ", req.user);
-  res.render('index', { title: "Game Trade", user: req.user, games: []});
+  var games = [];
+  if (req.user && req.user.games) {
+    var games = req.user.games; 
+  };
+  res.render('index', { 
+    title: "Game Trade", 
+    user: req.user, 
+    games: games, 
+    state: "home"});
 });
 
 router.get('/login', function(req, res, next) {
@@ -21,7 +29,11 @@ router.get('/register', function(req, res, next) {
 });
 
 
-
+// go to add game form 
+router.get('/addGame', authMiddleware, function(req, res, next) {
+  console.log("User: ", req.user);
+  res.render('addGame', { user: req.user});
+});
 
 
 

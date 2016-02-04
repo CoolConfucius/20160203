@@ -2,31 +2,29 @@ extends layout
 
 block content
   .jumbotron.text-center
-    h1 Book Swap
+    h1 Game Trade
     .container#list
       .row
         .col-xs-2 Title
-        .col-xs-2 Author
+        .col-xs-2 Publisher
         .col-xs-2 Rating
-      .row.book
-        .col-xs-2= book.title
-        .col-xs-2= book.author
-        .col-xs-2= book.rating
+        .col-xs-2 Owner
+      hr  
+      .row.game
+        .col-xs-2= game.title
+        .col-xs-2= game.publisher
+        .col-xs-2= game.rating
+        .col-xs-2= owner.email
         hr
-        img.imageDetail(src=book.imageURL)
+        img.imageDetail(src=game.imageURL)
     hr
-    //- .container#tenantslist
-    //-   .row
-    //-     if tenants
-    //-       if tenants[0]
-    //-         .col-xs-2 Tenants in Apt:
-    //-            each tenant in tenants 
-    //-              .row.tenant
-    //-                .col-xs-2.name= tenant.name
-    //-       else 
-    //-         .col-xs-3 Apartment is empty
+
+    if owner.email !== user.email
+      .btn.btn-primary#offerTrade(data-gameid=gameid, data-ownerid=ownerid) Offer Trade
+
         
-        
+block scripts
+  script(src="/js/main.js")
 
       
       

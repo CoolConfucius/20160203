@@ -3,46 +3,71 @@
 $(document).ready(init); 
 
 function init() {
-  $('#add').click(addCharacter); 
-  $('#collection').on('click', '.remove', removeCharacter)
+  $('.showGame').click(showGame);
+  $('#offerTrade').click(offerTrade);
+  $('#makeTrade').click(makeTrade);
+  $('#accept').click(acceptTrade);
+  $('#decline').click(declineTrade);
 }
 
-function addCharacter() {
-  console.log("addCharacter");
-  var name = $('#name').text(); 
-  var find = $(this).data('find'); 
+function showGame(){
+  console.log('this data is: ', $(this).data().gameid.replace(/\"/g,""));
+  location.href = '/games/showpage/' + $(this).data().gameid.replace(/\"/g,"") + '/' + $(this).data().userid.replace(/\"/g,"");  
+}
 
-  $.ajax({
-    url: "/sw/add",
-    method: "PUT",
-    data: {
-      name: name, find: find, addedAt: Date.now()
-    }
-  })
-  .success(function(data) {
-    location.replace('/users/profile');
+function offerTrade(){
+  console.log("This data", $(this).data());
+  console.log('this data is: ', $(this).data().gameid.replace(/\"/g,""));
+  var desiredgame = '/'+ $(this).data().gameid.replace(/\"/g,"");
+  var owner = '/'+ $(this).data().ownerid.replace(/\"/g,"");
+
+  location.href = '/games/offerTrade' + desiredgame + owner
+}
+
+function makeTrade(){
+  console.log("THIS DATA:", $(this).data());
+  var owner = '/' + $(this).data().owner.replace(/\"/g,"");
+  var desiredgame = '/' + $(this).data().desiredgame.replace(/\"/g,"");
+  var user = '/' + $(this).data().userid.replace(/\"/g,"");
+  var game = '/' + $(this).data().gameid.replace(/\"/g,"");
+  var api = '/trades' + owner + desiredgame + user + game; 
+  $.post(api)
+  .success(function() {
+    location.href = '/trades';
   })
   .fail(function(err) {
-    alert('Error. Check console.');
-    console.error("Error:", err);
-  });;
+    alert('Error.  Check console.');
+    console.log('err:', err);
+  });
 }
 
-// function removeCharacter() {
-//   var _id = $(this).data('_id'); 
+function acceptTrade(){
+  var tradeId = '/' + $(this).data().trade.replace(/\"/g,""); 
+  
+  $.ajax({
+    url: '/trades' + tradeId, 
+    method: "PUT"
+  })
+  .success(function(data) {
+    location.replace('/trades/mine');
+  })
+  .fail(function(err) {
+    console.error("Error:", err);
+  });
+}
 
-//   $.ajax({
-//     url: "/sw/remove",
-//     method: "PUT",
-//     data: {
-//       _id: _id
-//     }
-//   })
-//   .success(function(data) {
-//     location.replace('/users/profile');
-//   })
-//   .fail(function(err) {
-//     alert('Error. Check console.');
-//     console.error("Error:", err);
-//   });;
-// }
+function declineTrade(){
+  var tradeId = '/' + $(this).data().trade.replace(/\"/g,""); 
+  
+  $.ajax({
+    url: '/trades/decline' + tradeId, 
+    method: "PUT"
+  })
+  .success(function(data) {
+    location.replace('/trades/mine');
+  })
+  .fail(function(err) {
+    console.error("Error:", err);
+  });
+}
+

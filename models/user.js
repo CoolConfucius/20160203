@@ -20,7 +20,8 @@ var userSchema = new mongoose.Schema({
 userSchema.methods.generateToken = function() {
   var payload = {
     uid: this.uid,
-    _id: this._id
+    _id: this._id,
+    email: this.email
   };
   var token = jwt.encode(payload, JWT_SECRET);
 

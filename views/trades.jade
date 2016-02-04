@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  .jumbotron.text-center
+    h1 Game Trade
+  .container#list
+    if trades
+      .row 
+        .col-xs-2 User 1
+        .col-xs-2 Game 1
+        .col-xs-2 User 2
+        .col-xs-2 Game 2
+        .col-xs-2 Status
+      hr
+      each trade in trades
+        .row
+          .col-xs-2= trade.user1.email
+          .col-xs-2= trade.game1.title
+          .col-xs-2= trade.user2.email
+          .col-xs-2= trade.game2.title
+          .col-xs-2= trade.status
+          if trade.status === "pending"
+            if trade.user1.email === user.email
+              .col-xs-1.btn.btn-danger.btn-sm#decline(data-trade=trade._id) Decline
+              .col-xs-1.btn.btn-success.btn-sm#accept(data-trade=trade._id) Accept
+            if trade.user2.email === user.email
+              .col-xs-2.btn.btn-warning.btn-sm#withdraw(data-trade=trade._id) Withdraw
+    
+    br
+    if state === "myTrades"
+      a(href='/trades') See All Trades
+    else 
+      a(href='/trades/mine') See My Trades
+
+block scripts
+  script(src='/lib/firebase/firebase.js')
+  script(src="/js/main.js")

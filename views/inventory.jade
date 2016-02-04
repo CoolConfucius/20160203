@@ -4,16 +4,24 @@ block content
   .jumbotron
     h1.text-center= email+"'s Profile:"
   a.btn.btn-danger(href='/users/changepassword') Change password
-  if swchars
-    if swchars.length === 0
-      h3 Your Collection is Empty!
+  if games
+    if games.length === 0
+      h3 Your Inventory is Empty!
     else 
-      h3 Your Collection:   
+      h3 Your Inventory:   
     ul#collection 
-      each game in swchars
+      each game in games
         li
-          a.remove.btn.btn-small(data-_id=game._id) X
-          a.game.col-xs-offset-1(data-find=game.find, href='/sw/person/'+game.find)= game.name
+          a.remove.btn.btn-small(data-gameId=game._id) X
+          a.game.col-xs-offset-1(data-find=game.find, href='/sw/person/'+game.find)= game.title
+          if game.canTrade
+            a.col-xs-offset-1 Open to Trade
+            if state==="offerTrade"
+              .btn.btn-success#makeTrade(data-gameId=game._id, data-userId=user._id, data-desiredgame=desiredgame, data-owner=ownerid) Make Trade
+          else 
+            a.col-xs-offset-1 Not Open to Trade
+          btn.col-xs-2.btn.btn-primary.btn-sm.showGame(data-gameid=game._id, data-userid=user._id) Show Game
+
 
 block scripts
   script(src="/js/main.js")
