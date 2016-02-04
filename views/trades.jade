@@ -24,7 +24,7 @@ block content
               .col-xs-1.btn.btn-danger.btn-sm#decline(data-trade=trade._id) Decline
               .col-xs-1.btn.btn-success.btn-sm#accept(data-trade=trade._id) Accept
             if trade.user2.email === user.email
-              .col-xs-2.btn.btn-warning.btn-sm#withdraw(data-trade=trade._id) Withdraw
+              .col-xs-2.btn.btn-warning.btn-sm#decline(data-trade=trade._id) Withdraw
     
     br
     if state === "myTrades"

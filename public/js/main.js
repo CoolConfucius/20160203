@@ -8,6 +8,7 @@ function init() {
   $('#makeTrade').click(makeTrade);
   $('#accept').click(acceptTrade);
   $('#decline').click(declineTrade);
+  $('#toggle').click(toggle);
 }
 
 function showGame(){
@@ -71,3 +72,18 @@ function declineTrade(){
   });
 }
 
+
+function toggle(){
+  var gameid = '/' + $(this).data().gameid.replace(/\"/g,""); 
+  
+  $.ajax({
+    url: '/games/toggle' + gameid, 
+    method: "PUT"
+  })
+  .success(function(data) {
+    location.replace('/games/mine');
+  })
+  .fail(function(err) {
+    console.error("Error:", err);
+  });
+}

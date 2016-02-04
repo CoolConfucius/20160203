@@ -53,36 +53,6 @@ router.get('/mine', function(req, res, next) {
   });
 });
 
-// Accept a trade, using four params 
-// router.put('/:user1/:game1/:user2/:game2', function(req, res) {
-//   User.findById(req.params.user1, function(err, user1) {
-//     if(err) res.status(400).send(err);
-//     User.findById(req.params.user2, function(err, user2) {
-//       if(err) res.status(400).send(err);
-//       Game.findById(req.params.game1, function(err, game1) {
-//         if(err) res.status(400).send(err);
-//         Game.findById(req.params.game2, function(err, game2) {
-//           if(err) res.status(400).send(err);
-          
-//           var index1 = user1.games.indexOf(req.params.game1);
-//           user1.games.splice(index1, 1);
-
-//           var index2 = user2.games.indexOf(req.params.game2);
-//           user2.games.splice(index2, 1);
-
-//           user1.games.push(req.params.game2);
-//           user2.games.push(req.params.game1);
-
-//           user1.save(function(err, savedUser1) {
-//             user2.save(function(err, savedUser2) {
-//               res.status(err ? 400 : 200).send(err || savedUser1);
-//             })
-//           })
-//         });
-//       });   
-//     });
-//   });
-// });
 
 
 // Post trade: 
@@ -130,10 +100,10 @@ router.put('/:tradeId', function(req, res) {
       if(err) res.status(400).send(err);
       User.findById(trade.user2, function(err, user2) {
         if(err) res.status(400).send(err);
-        Game.findById(trade.game1, function(err, game1) {
-          if(err) res.status(400).send(err);
-          Game.findById(trade.game2, function(err, game2) {
-            if(err) res.status(400).send(err);
+        // Game.findById(trade.game1, function(err, game1) {
+        //   if(err) res.status(400).send(err);
+        //   Game.findById(trade.game2, function(err, game2) {
+        //     if(err) res.status(400).send(err);
             
             var index1 = user1.games.indexOf(trade.game1);
             user1.games.splice(index1, 1);
@@ -154,8 +124,8 @@ router.put('/:tradeId', function(req, res) {
               });
             });
 
-          });
-        });   
+        //   });
+        // });   
       });
     });
   });

@@ -139,6 +139,17 @@ router.get('/showpage/:gameId/:ownerId', function(req, res, next){
   }); 
 });
 
+router.put('/toggle/:gameid', function(req, res, next){
+  Game.findById(req.params.gameid, function(err, game){
+    if(err) res.status(400).send(err);
+    game.canTrade = !game.canTrade;
+    game.save(function(err, savedGame){
+      res.status(err ? 400 : 200).send(err || savedGame);
+      console.log('toggled game');
+    });
+  });
+});
+
 
 
 module.exports = router;

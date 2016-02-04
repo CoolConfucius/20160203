@@ -9,18 +9,20 @@ block content
       h3 Your Inventory is Empty!
     else 
       h3 Your Inventory:   
-    ul#collection 
+    .container#collection 
+      .row
+        .col-xs-2 Title
       each game in games
-        li
-          a.remove.btn.btn-small(data-gameId=game._id) X
-          a.game.col-xs-offset-1(data-find=game.find, href='/sw/person/'+game.find)= game.title
+        .row
+          btn.col-xs-2.btn.btn-primary.btn-sm.showGame(data-gameid=game._id, data-userid=user._id)= game.title
+          
           if game.canTrade
             a.col-xs-offset-1 Open to Trade
             if state==="offerTrade"
               .btn.btn-success#makeTrade(data-gameId=game._id, data-userId=user._id, data-desiredgame=desiredgame, data-owner=ownerid) Make Trade
           else 
             a.col-xs-offset-1 Not Open to Trade
-          btn.col-xs-2.btn.btn-primary.btn-sm.showGame(data-gameid=game._id, data-userid=user._id) Show Game
+          //- btn.col-xs-2.btn.btn-primary.btn-sm.showGame(data-gameid=game._id, data-userid=user._id) Show Game
 
 
 block scripts

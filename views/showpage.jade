@@ -9,19 +9,29 @@ block content
         .col-xs-2 Publisher
         .col-xs-2 Rating
         .col-xs-2 Owner
+        .col-xs-2 Down for Trade?
       hr  
       .row.game
         .col-xs-2= game.title
         .col-xs-2= game.publisher
         .col-xs-2= game.rating
         .col-xs-2= owner.email
-        hr
-        img.imageDetail(src=game.imageURL)
+        if game.canTrade
+          .col-xs-2 Yes
+        else
+          .col-xs-2 No
+      br
+      img.imageDetail(src=game.imageURL)
     hr
 
     if owner.email !== user.email
       .btn.btn-primary#offerTrade(data-gameid=gameid, data-ownerid=ownerid) Offer Trade
-
+    else 
+      if game.canTrade
+        .btn.btn-primary#toggle(data-gameid=gameid) Withdraw
+      else
+        .btn.btn-primary#toggle(data-gameid=gameid) Open to Trade
+      
         
 block scripts
   script(src="/js/main.js")
