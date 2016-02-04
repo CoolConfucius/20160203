@@ -10,7 +10,8 @@ block content
 
     if games
       if (state==='games')
-        .row
+        br
+        .row.glow
           .col-xs-2 Title
           .col-xs-2 Platform
           .col-xs-1 Rating
@@ -20,15 +21,14 @@ block content
         each game in games 
           .row.game
             .col-xs-2.btn.btn-primary.btn-sm.showGame(data-gameId=game._id, data-userId=game.userId)=game.title
-            .col-xs-2.platform= game.platform
-            .col-xs-1.rating= game.rating
-            //- .col-xs-2
+            .col-xs-2.glow.platform= game.platform
+            .col-xs-1.glow.rating= game.rating
             if game.canTrade === "yes"
-             .col-xs-3 Available for trade             
+             .col-xs-3.glow Available for trade             
             else if game.canTrade === "no"
-              .col-xs-3 Not available for trade
+              .col-xs-3.glow Not available for trade
             else
-              .col-xs-3 Game is in a pending trade
+              .col-xs-3.glow Game is in a pending trade
 
       hr
 
