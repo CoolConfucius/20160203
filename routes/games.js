@@ -10,7 +10,7 @@ var Trade = require('../models/trade');
 router.use(authMiddleware);
 
 
-// get games that aren't yours that are available for trade: 
+// get games that aren't yours and that are available for trade: 
 router.get('/', function(req, res, next) {  
   User
   .find({
@@ -42,7 +42,7 @@ router.get('/mine', function(req, res, next) {
   .findById(req.user._id)
   .populate('games')
   .exec(function(err, user) {
-    // res.status(err ? 400 : 200).send(err || savedUser); 
+    
     if (err) { res.status(400).send(err); return; };
     res.render('inventory', {games: user.games, user: req.user});
   });
@@ -56,7 +56,7 @@ router.get('/offerTrade/:desiredGame/:owner', function(req, res, next) {
   .findById(req.user._id)
   .populate('games')
   .exec(function(err, user) {
-    // res.status(err ? 400 : 200).send(err || savedUser); 
+    
     if (err) { res.status(400).send(err); return; };
     res.render('inventory', {
       state: "offerTrade",
@@ -75,11 +75,11 @@ router.post('/', function(req, res) {
     req.body.userId = req.user._id; 
     var game = new Game(req.body); 
     game.save(function(err, savedGame){
-      // console.log("saved Game err",err);
+      
       if (err) {res.status(400).send(err)};
       user.games.push(game._id);
       user.save(function(err, savedUser) {
-        // console.log("err",err);
+        
         res.status(err ? 400 : 200).send(err || savedUser); 
       });
     });
@@ -119,23 +119,23 @@ router.put('/toggle/:gameid', function(req, res, next){
 
 // Remove a game from Game Trade
 router.delete('/:gameid/:userid', function(req, res, next){
-  // console.log("remove a game!");
+  
   User.findById(req.user._id, function(err, user){
-    // console.log("found user!", user);
+  
     if(err) res.status(400).send(err);
 
     Game.findById(req.params.gameid, function(err, game){
-      // console.log("found game!", game);
+
       if(err) res.status(400).send(err);
 
       var index = user.games.indexOf(game._id);
-      // console.log("gameindx",index);
+
       user.games.splice(index, 1);
       
       user.save(function(err, savedUser){
         game.remove();
         res.status(err ? 400 : 200).send(err || savedUser);
-        // console.log('deleted game');
+        
       });
     });
   });
